@@ -4,8 +4,8 @@
 // Create an MPU6050 object
 MPU6050 mpu;
 
-// Variable to hold the pitch angle
-float pitch;
+// Variables to hold pitch and roll angles
+float pitch, roll;
 
 void setup() {
   // Initialize serial communication
@@ -32,12 +32,17 @@ void loop() {
   float ay_g = ay / 16384.0;
   float az_g = az / 16384.0;
 
-  // Calculate pitch (in radians)
-  pitch = atan(-ax_g / sqrt(ay_g * ay_g + az_g * az_g));
+  // Calculate roll (in radians)
+  roll = atan2(ay_g, az_g);
 
-  // Print the pitch angle
-  Serial.print("Pitch (radians): ");
-  Serial.println(pitch, 4);
+  // Calculate pitch (in radians)
+  pitch = atan2(-ax_g, sqrt(ay_g * ay_g + az_g * az_g));
+
+  // Print angles as comma-separated values
+  Serial.print(roll, 4); // Print roll first
+  Serial.print(", ");
+  Serial.print(pitch, 4); // Print pitch second
+  Serial.println();
 
   delay(100);
 }
