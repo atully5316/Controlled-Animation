@@ -59,12 +59,29 @@ def draw_cube(screen, vertices, edges):
 angle_x = 0
 angle_y = 0
 rotation_speed = 0.05  # Adjust rotation speed as needed
+dragging = False
+last_mouse_pos = None
 
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:  # Left mouse button
+                dragging = True
+                last_mouse_pos = event.pos
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:  # Left mouse button
+                dragging = False
+                last_mouse_pos = None
+        elif event.type == pygame.MOUSEMOTION:
+            if dragging:
+                if last_mouse_pos is not None:
+                    dx, dy = event.pos[0] - last_mouse_pos[0], event.pos[1] - last_mouse_pos[1]
+                    angle_x -= dy * rotation_speed * 0.1
+                    angle_y -= dx * rotation_speed * 0.1
+                    last_mouse_pos = event.pos
 
     # Read joystick data from serial
     if ser.in_waiting:
