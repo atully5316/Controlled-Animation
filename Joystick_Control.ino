@@ -1,43 +1,37 @@
-#include <Wire.h>
-
-// Joystick analog pins
-const int joystickXPin = A0;  // X-axis pin
-const int joystickYPin = A1;  // Y-axis pin
-
-// Define thresholds for mapping joystick values
-const int threshold = 100;  // Threshold for detecting movement
-
 void setup() {
-  // Initialize serial communication
-  Serial.begin(57600);
+  Serial.begin(9600);
 }
 
 void loop() {
-  // Read joystick X and Y values
-  int xValue = analogRead(joystickXPin);
-  int yValue = analogRead(joystickYPin);
+  int x = analogRead(A0); // Read joystick x-axis
+  int y = analogRead(A1); // Read joystick y-axis
 
-  // Map joystick values to -1, 0, 1
-  int xMovement = mapToMovement(xValue);
-  int yMovement = mapToMovement(yValue);
+  // Define thresholds
+  int threshold = 200; // Adjust as needed
+  int neutral = 512;
 
-  // Print the movement values as a comma-separated list
-  Serial.print(xMovement);
-  Serial.print(",");
-  Serial.println(yMovement);
+  int x_direction = 0;
+  int y_direction = 0;
 
-  // Delay for a short period
-  delay(100);  // Adjust delay if needed
-}
-
-// Function to map joystick values to -1, 0, or 1
-int mapToMovement(int value) {
-  // Map the analog reading to movement values
-  if (value < (512 - threshold)) {
-    return -1;  // Movement in the negative direction
-  } else if (value > (512 + threshold)) {
-    return 1;   // Movement in the positive direction
+  if (x < neutral - threshold) {
+    x_direction = -1;
+  } else if (x > neutral + threshold) {
+    x_direction = 1;
   } else {
-    return 0;   // No movement
+    x_direction = 0;
   }
+
+  if (y < neutral - threshold) {
+    y_direction = -1;
+  } else if (y > neutral + threshold) {
+    y_direction = 1;
+  } else {
+    y_direction = 0;
+  }
+
+  Serial.print(x_direction);
+  Serial.print(",");
+  Serial.println(y_direction);
+
+  delay(100); // Adjust delay as needed
 }
