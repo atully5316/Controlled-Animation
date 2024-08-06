@@ -42,7 +42,7 @@ class Cube:
         y = -v[1] * scale + 300
         return (x, y)
 
-    def draw(self, screen, angle_x, angle_y):
+    def draw(self, screen, angle_x=0, angle_y=0):
         rotated_vertices = self.rotate(angle_x, angle_y)
         for edge in self.edges:
             v1 = self.project(rotated_vertices[edge[0]])
