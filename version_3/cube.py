@@ -2,7 +2,8 @@ import pygame
 import math
 
 class Cube:
-    def __init__(self):
+    def __init__(self, center=(0, 0, 0)):
+        self.center = center
         self.vertices = [
             [-1, -1, -1],
             [1, -1, -1],
@@ -32,6 +33,11 @@ class Cube:
             x_new = x * math.cos(angle_y) + z * math.sin(angle_y)
             z = -x * math.sin(angle_y) + z * math.cos(angle_y)
             x = x_new
+            
+            # Translate vertices based on center
+            x += self.center[0]
+            y += self.center[1]
+            z += self.center[2]
             
             rotated.append((x, y, z))
         return rotated
